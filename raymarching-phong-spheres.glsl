@@ -5,7 +5,7 @@ float MAX_DISTANCE = 300.0;
 float map(vec3 p)
 {
     vec3 q = fract(p) * 2.  - 1.;
-        return length(q) - 0.3;
+    return length(q) - 0.3;
 }
 
 float trace(vec3 o, vec3 r, float start, float end)
@@ -68,7 +68,7 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-	  vec2 uv = fragCoord.xy / iResolution.xy;
+    vec2 uv = fragCoord.xy / iResolution.xy;
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x / iResolution.y;    
     vec3 r = ray(60.0, iResolution.xy, fragCoord);    
@@ -78,7 +78,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float t = trace(o, r, MIN_DISTANCE, MAX_DISTANCE);    
     if (t > MAX_DISTANCE - EPSILON) {
         fragColor = vec4(0.0, 0.0, 0.0, 0.0);
-		return;
+	return;
     }    
     float fog = 1.0 / (1.0 + t * t * 0.1);
     vec3 fc = vec3(fog);  
@@ -87,5 +87,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 K_s = vec3(1.0, 1.0, 1.0);
     float shininess = 10.0;    
     vec3 color = phongIllumination(K_a, K_d, K_s, shininess, o + t*r, o);    
-	  fragColor = vec4(fc*color,1.0);
+    fragColor = vec4(fc*color,1.0);
 }
