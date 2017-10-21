@@ -28,7 +28,7 @@ vec3 ray(float fov, vec2 size, vec2 fragCoord) {
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-	  vec2 uv = fragCoord.xy / iResolution.xy;
+    vec2 uv = fragCoord.xy / iResolution.xy;
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x / iResolution.y;    
     vec3 r = ray(60.0, iResolution.xy, fragCoord);    
