@@ -1,7 +1,7 @@
-float EPSILON = 0.01;
+float EPSILON = 0.005;
 float MIN_DISTANCE = 2.0;
 float MAX_DISTANCE = 200.0;
-float THETA = 0.007;
+float THETA = 0.005;
 
 float cubeSDF(vec3 p) {
     vec3 d = abs(p) - vec3(0.35, 1.6, 0.4);
@@ -27,9 +27,9 @@ float map(vec3 p)
 float trace(vec3 o, vec3 r, float start, float end)
 {
     float depth = start;
-    for (int i = 0; i < 3400; ++i) {
+    for (int i = 0; i < 300; ++i) {
         float dist = map(o + r * depth);
-        depth += dist * 0.01;
+        depth += dist * 0.2;
     }
     return depth;
 }
@@ -78,13 +78,13 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-	  vec2 uv = fragCoord.xy / iResolution.xy;
+    vec2 uv = fragCoord.xy / iResolution.xy;
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x / iResolution.y;    
     vec3 r = ray(60.0, iResolution.xy, fragCoord);    
-    float the = iTime;
-    //r.xy *= mat2(cos(the), -sin(the), sin(the), cos(the));    
-    vec3 o = vec3(0.0, iTime, 6.0);    
+    float the = iTime/4.;
+    r.xy *= mat2(cos(the), -sin(the), sin(the), cos(the));    
+    vec3 o = vec3(0.0, iTime / 2., 6.0);    
     float t = trace(o, r, MIN_DISTANCE, MAX_DISTANCE);    
     float fog = 1.0 / (1.0 + t * t * 0.1);
     vec3 fc = vec3(fog);  
@@ -93,5 +93,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 K_s = vec3(1.0, 1.0, 1.0);
     float shininess = 10.0;    
     vec3 color = phongIllumination(K_a, K_d, K_s, shininess, o + t*r, o);    
-	  fragColor = vec4(color*fc,1.0);
+    fragColor = vec4(fc*color,1.0);
 }
